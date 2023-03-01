@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using QuickType;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -32,7 +33,9 @@ public class GameManager : MonoBehaviour
     public List<GameObject> btns;
     private List<QuestionElement> gridQuestions = new();
     private string lsnJson;
-    
+    public Color transparent;
+    public Color defaultcolor;
+
 
     private readonly Dictionary<char, string> morse = new()
     {
@@ -125,50 +128,55 @@ public class GameManager : MonoBehaviour
 
     private void GetGridQuestions()
     {
-        if (btns.Count > 0)
-        {
-            foreach (var b in btns)
-            {
-                Destroy(b);
-            }
-        }
+        Debug.Log("method called");
         var randomQuestionIndex = Random.Range(0, _unansweredQuestions.Count);
         var index = 0;
+        //buttons no longer added dynamically
+        /*if (btns.Count == null || btns.Count == 0)
+        {
+            while (btns.Count < 4)
+            {
+                GameObject createdButtonItem = Instantiate(btn);
+                //createdButtonItem.GetComponent<ButtonEntryData>().choice.text = ToMorse(gridQuestions[index].String);
+                createdButtonItem.transform.SetParent(grid.transform);
+                btns.Add(createdButtonItem);
+            }
+        }*/
+        foreach (var b in GameObject.FindGameObjectsWithTag("dynamicButton"))
+        {
+            b.GetComponent<Image>().color = defaultcolor;
+        }
         while (index < 4)
         {
             randomQuestionIndex = Random.Range(0, _unansweredQuestions.Count);
-            currentQuestion = _unansweredQuestions[randomQuestionIndex];
+            var candidate = _unansweredQuestions[randomQuestionIndex];
             Debug.Log(currentQuestion.String);
-            if (gridQuestions.Contains(currentQuestion) || gridQuestions == null)
+            if (!gridQuestions.Contains(candidate))
             {
-                return;
+                gridQuestions.Add(candidate);
+                index++;
             }
-            gridQuestions.Add(currentQuestion);
-            index++;
         }
 
         index = 0;
         var correctAnswerIndex = Random.Range(0, 3);
         /*GameObject createdButtonItem = Instantiate(btn);
         createdButtonItem.transform.SetParent(grid.transform);*/
-        while (index < 4)
+        foreach (var createdButtonItem in btns)
         {
-            GameObject createdButtonItem = Instantiate(btn);
-            createdButtonItem.GetComponent<ButtonEntryData>().choice.text = ToMorse(gridQuestions[index].String);
-            createdButtonItem.transform.SetParent(grid.transform);
-            btns.Add(createdButtonItem);
             if (index != correctAnswerIndex)
             {
                 createdButtonItem.GetComponent<ButtonEntryData>().answer = false;
+                createdButtonItem.GetComponent<ButtonEntryData>().choice.text = ToMorse(gridQuestions[index].String);
             }
             else
             {
+                createdButtonItem.GetComponent<ButtonEntryData>().choice.text = ToMorse(gridQuestions[index].String);
                 createdButtonItem.GetComponent<ButtonEntryData>().answer = true;
                 currentQuestion = gridQuestions[correctAnswerIndex];
             }
 
             index++;
-
         }
 
     }
@@ -195,10 +203,11 @@ public class GameManager : MonoBehaviour
 
     public void Correct()
     {
+        gridQuestions.Clear();
         correct.SetActive(false);
-        foreach (var b in btns)
+        foreach (var b in GameObject.FindGameObjectsWithTag("dynamicButton"))
         {
-            b.SetActive(false);
+            b.GetComponent<Image>().color = transparent;
         }
         questionCount--;
         countText.text = questionCount.ToString();
@@ -218,10 +227,12 @@ public class GameManager : MonoBehaviour
     
     public void Incorrect()
     {
+        
+        gridQuestions.Clear();
         incorrect.SetActive(false);
-        foreach (var b in btns)
+        foreach (var b in GameObject.FindGameObjectsWithTag("dynamicButton"))
         {
-            b.SetActive(false);
+            b.GetComponent<Image>().color = transparent;
         }
         countText.text = questionCount.ToString();
         incorrect.SetActive(true);
@@ -251,6 +262,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator NextQuestion(float time)
     {
         yield return new WaitForSeconds(time);
+        gridQuestions.Clear();
         if(isGrid) GetGridQuestions();
         else GetRandomQuestion();
         questiontext.text = currentQuestion.String;

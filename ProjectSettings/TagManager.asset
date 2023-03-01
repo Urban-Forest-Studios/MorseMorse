@@ -7,6 +7,7 @@ TagManager:
   - MaterialButtonLayer
   - MaterialText
   - gamemanager
+  - dynamicButton
   layers:
   - Default
   - TransparentFX
