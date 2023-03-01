@@ -1,0 +1,91 @@
+{
+  "lessons": [
+    {
+    "name": "alphabet",
+    "type": "grid",
+    "questions": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "W",
+      "X",
+      "Y",
+      "Z",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "0",
+      ".",
+      "?"
+    ]
+  },
+    {
+      "name": "Phrases",
+      "type": "type",
+      "questions": [
+        "the",
+        "of",
+        "and",
+        "to",
+        "a",
+        "in",
+        "that",
+        "is",
+        "for",
+        "it",
+        "with",
+        "you",
+        "have",
+        "be",
+        "on",
+        "not",
+        "are",
+        "this",
+        "they",
+        "from"
+      ]
+    },
+    {
+      "name": "Radio",
+      "type": "type",
+      "questions": [
+        "AR",
+        "AS",
+        "BT",
+        "CQ",
+        "DE",
+        "K",
+        "KN",
+        "R",
+        "SK",
+        "TNX",
+        "UR",
+        "73",
+        "88"
+      ]
+    }
+  ]
+}
