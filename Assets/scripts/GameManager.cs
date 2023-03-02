@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
         { '7', "--..." },
         { '8', "---.." },
         { '9', "----." },
-        { ' ', " " },
+        { ' ', "/" },
         { ',', "--..--" },
         { '?', "..--.." },
         { ':', "---..." },
@@ -88,7 +88,8 @@ public class GameManager : MonoBehaviour
         { '\'', ".----."},
         { ')', "-.--.-" },
         { '+', ".-.-." },
-        { '@', ".--.-." }
+        { '@', ".--.-." },
+        { '!', "---."}
     }; 
 
     private void Start()
@@ -124,11 +125,11 @@ public class GameManager : MonoBehaviour
     {
         var randomQuestionIndex = Random.Range(0, _unansweredQuestions.Count);
         currentQuestion = _unansweredQuestions[randomQuestionIndex];
+        PlayMorseCode(ToMorse(currentQuestion.String));
     }
 
     private void GetGridQuestions()
     {
-        Debug.Log("method called");
         var randomQuestionIndex = Random.Range(0, _unansweredQuestions.Count);
         var index = 0;
         //buttons no longer added dynamically
@@ -146,22 +147,25 @@ public class GameManager : MonoBehaviour
         {
             b.GetComponent<Image>().color = defaultcolor;
         }
-        while (index < 4)
+        var correctAnswerIndex = Random.Range(0, _unansweredQuestions.Count);
+        currentQuestion = _unansweredQuestions[correctAnswerIndex];
+        while (index < 3)
         {
-            randomQuestionIndex = Random.Range(0, _unansweredQuestions.Count);
-            var candidate = _unansweredQuestions[randomQuestionIndex];
-            Debug.Log(currentQuestion.String);
-            if (!gridQuestions.Contains(candidate))
+            randomQuestionIndex = Random.Range(0, questions.Count);
+            var candidate = questions[randomQuestionIndex]; 
+            if (!gridQuestions.Contains(candidate) || currentQuestion.String != candidate.String)
             {
                 gridQuestions.Add(candidate);
                 index++;
             }
+            gridQuestions.Add(currentQuestion);
+            gridQuestions.Shuffle();
         }
 
         index = 0;
-        var correctAnswerIndex = Random.Range(0, 3);
         /*GameObject createdButtonItem = Instantiate(btn);
         createdButtonItem.transform.SetParent(grid.transform);*/
+        correctAnswerIndex = gridQuestions.IndexOf(currentQuestion);
         foreach (var createdButtonItem in btns)
         {
             if (index != correctAnswerIndex)
@@ -174,6 +178,8 @@ public class GameManager : MonoBehaviour
                 createdButtonItem.GetComponent<ButtonEntryData>().choice.text = ToMorse(gridQuestions[index].String);
                 createdButtonItem.GetComponent<ButtonEntryData>().answer = true;
                 currentQuestion = gridQuestions[correctAnswerIndex];
+                Debug.Log(gridQuestions[correctAnswerIndex].String);
+                PlayMorseCode(ToMorse(gridQuestions[correctAnswerIndex].String));
             }
 
             index++;
@@ -218,9 +224,9 @@ public class GameManager : MonoBehaviour
             answertext.text = "";
             StartCoroutine(NextQuestion(1));
         }
-        else
+        else if (questionCount == 0 || questionCount < 0)
         {
-            completeScreen.SetActive(true);
+            
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
         }
     }
@@ -244,8 +250,6 @@ public class GameManager : MonoBehaviour
         incorrect.SetActive(false);
         correct.SetActive(false);
         var answer = ToMorse(currentQuestion.String);
-        Debug.Log(answer);
-        Debug.Log(answertext.text);
         answertext.text += " ";
         if (answertext.text == answer)
         {
@@ -285,5 +289,74 @@ public class GameManager : MonoBehaviour
     public void Exit()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+    }
+    
+    
+    //MORSE CODE PLAYER
+    public float dotFrequency = 550.0f;  // Frequency of a dot in Hz
+    public float dashFrequency = 550.0f;  // Frequency of a dash in Hz
+    public float sampleRate = 44100.0f;  // Audio sample rate in Hz
+    public float dotDuration = 0.1f;  // Duration of a dot in seconds
+    public float dashDuration = 0.3f;  // Duration of a dash in seconds
+    public float silenceDuration = 0.1f;  // Duration of the silence between dots and dashes in seconds
+    public float cspaceSilenceDuration = 0.3f;  // Duration of the silence between characters in seconds
+    public AudioSource source;
+
+    public void PlayMorseCode(string morseCode) {
+        StartCoroutine(PlayMorseCodeCoroutine(morseCode));
+    }
+
+    IEnumerator PlayMorseCodeCoroutine(string morseCode) {
+        int numSamplesDot = Mathf.RoundToInt(dotDuration * sampleRate);
+        int numSamplesDash = Mathf.RoundToInt(dashDuration * sampleRate);
+        int numSamplesSilence = Mathf.RoundToInt(silenceDuration * sampleRate);
+        
+
+        foreach (char c in morseCode) {
+            if (c == '.') {
+                PlayAudio(numSamplesDot);
+                yield return new WaitForSeconds(dotDuration);
+            } else if (c == '-') {
+                PlayAudio(numSamplesDash);
+                yield return new WaitForSeconds(dashDuration);
+            } else if (c == ' ') {
+                yield return new WaitForSeconds(cspaceSilenceDuration);
+            } else if (c == '/')
+            {
+                yield return new WaitForSeconds(0.5f);
+            }
+            yield return new WaitForSeconds(silenceDuration);
+        }
+    }
+
+    void PlayAudio(int smpl)
+    {
+        int sampleFreq = 44000;
+        float frequency = 550;
+ 
+        float[] samples = new float[smpl];
+        for(int i = 0; i < samples.Length; i++)
+        {
+            samples[i] = Mathf.Sin(Mathf.PI*2*i*frequency/sampleFreq);
+        }
+        AudioClip ac = AudioClip.Create("Test", samples.Length, 1, sampleFreq, false);
+        ac.SetData(samples, 0);
+        gameObject.GetComponent<AudioSource>().clip = ac;
+        gameObject.GetComponent<AudioSource>().Play();
+    }
+}
+
+public static class Extensions
+{
+    private static System.Random rand = new System.Random();
+ 
+    public static void Shuffle<T>(this IList<T> values)
+    {
+        for (int i = values.Count - 1; i > 0; i--) {
+            int k = rand.Next(i + 1);
+            T value = values[k];
+            values[k] = values[i];
+            values[i] = value;
+        }
     }
 }
