@@ -17,7 +17,7 @@ public class listManager : MonoBehaviour
     private void Start()
     {
         //jsonFile = Resources.Load<TextAsset>("Assets/questions/lessons.json");
-        lsnJson = File.ReadAllText("Assets/questions/lessons.json");
+        lsnJson = File.ReadAllText("jar:file://" + Application.dataPath + "!/assets");
         lessons = Lessons.FromJson(lsnJson);
         foreach (var lesson in lessons.LessonsLessons)
         {
