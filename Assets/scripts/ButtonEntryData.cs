@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.Mime;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,5 +17,4 @@ public class ButtonEntryData : MonoBehaviour
         if (answer) gameManager.Correct();
         else gameManager.Incorrect();
     }
-
 }

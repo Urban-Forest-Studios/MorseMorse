@@ -4,7 +4,7 @@ public class GM : MonoBehaviour
 {
     public static int activeLessonIndex;
     public static GM Instance;
-    
+
     private void Awake()
     {
         //Handles the first time run case
@@ -15,7 +15,7 @@ public class GM : MonoBehaviour
             //Since the gameObject will live then
             //this instance of the script lives as well.
             DontDestroyOnLoad(gameObject);
-            
+
             //Sets Instance to this (the current running copy 
             //of the GameManger script)
             Instance = this;
@@ -29,5 +29,4 @@ public class GM : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
 }

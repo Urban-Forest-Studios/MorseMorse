@@ -23,11 +23,12 @@ namespace Google.MaterialDesign.Icons
         private static readonly MethodInfo DoVerticalAlignmentControl =
             typeof(FontDataDrawer).GetMethod("DoVerticalAligmentControl", BindingFlags.NonPublic | BindingFlags.Static);
 
+        private readonly GUIContent iconTooltip = new();
+        private readonly GUIContent mixedContent = new("\u2014", "Mixed Values");
+
         private MaterialIcon icon;
         private GUIStyle iconStyle;
-        private readonly GUIContent iconTooltip = new();
         private Font MaterialIconsRegular;
-        private readonly GUIContent mixedContent = new("\u2014", "Mixed Values");
         private SerializedProperty spAlignment;
         private SerializedProperty spColor;
         private SerializedProperty spRaycastTarget;

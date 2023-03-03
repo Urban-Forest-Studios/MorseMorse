@@ -69,12 +69,8 @@ namespace TMPro.Examples
             {
                 m_textMesh = gameObject.AddComponent<Text>();
 
-                if (TextMeshFont != null)
-                {
-                    m_textMesh.font = TextMeshFont;
-                    //m_textMesh.renderer.sharedMaterial = m_textMesh.font.material;
-                }
-
+                if (TextMeshFont != null) m_textMesh.font = TextMeshFont;
+                //m_textMesh.renderer.sharedMaterial = m_textMesh.font.material;
                 //m_textMesh.font = Resources.Load("Fonts/ARIAL", typeof(Font)) as Font;
                 //m_textMesh.renderer.sharedMaterial = m_textMesh.font.material;
                 m_textMesh.fontSize = 48;
@@ -96,7 +92,7 @@ namespace TMPro.Examples
                 }
                 else if (BenchmarkType == 1)
                 {
-                    m_textMesh.text = label02 + (i % 1000);
+                    m_textMesh.text = label02 + i % 1000;
                 }
 
                 yield return null;

@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.Mime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -8,9 +5,9 @@ using UnityEngine.UI;
 public class LessonEntryData : MonoBehaviour
 {
     public Text title;
-    public Text count; 
+    public Text count;
     public int index;
-    
+
     public void Play()
     {
         GM.activeLessonIndex = index;

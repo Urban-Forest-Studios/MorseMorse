@@ -11,6 +11,10 @@ namespace Google.MaterialDesign.Icons
     {
         private static readonly Color darkColor = new(0.196f, 0.196f, 0.196f);
         private static readonly Color lightColor = new(0.804f, 0.804f, 0.804f);
+
+        private readonly int iconSize = 58;
+        private readonly int labelHeight = 24;
+        private readonly int spacing = 10;
         private CodepointData[] codepointsCollection;
         private CodepointData[] filteredCollection;
         private bool filterGotFocus;
@@ -18,9 +22,6 @@ namespace Google.MaterialDesign.Icons
         private GUIStyle iconImageStyle;
         private GUIStyle iconLabelStyle;
         private GUIStyle iconSelectionStyle;
-
-        private readonly int iconSize = 58;
-        private readonly int labelHeight = 24;
 
         private Font MaterialIconsRegular;
         private Action<string> onSelectionChanged;
@@ -30,7 +31,6 @@ namespace Google.MaterialDesign.Icons
         private string selectedName;
         private bool selectionKeep;
         private bool showNames = true;
-        private readonly int spacing = 10;
         private GUIStyle toolbarLabelStyle;
         private GUIStyle toolbarSeachCancelButtonEmptyStyle;
         private GUIStyle toolbarSeachCancelButtonStyle;
