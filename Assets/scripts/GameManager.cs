@@ -102,7 +102,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         i = GM.activeLessonIndex;
-        lsnJson = File.ReadAllText("jar:file://" + Application.dataPath + "!/assets");
+        lsnJson = File.ReadAllText("Assets/questions/lessons.json");
         lessons = Lessons.FromJson(lsnJson);
         questions = lessons.LessonsLessons[i].Questions;
 
